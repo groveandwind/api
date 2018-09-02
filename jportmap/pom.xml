@@ -9,4 +9,13 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>个人使用的api</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

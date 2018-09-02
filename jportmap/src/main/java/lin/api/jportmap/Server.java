@@ -12,6 +12,7 @@ import java.util.Vector;
  * <p>Description:启动监听服务 </p>
  * <p>Copyright: Copyright (c) 2005</p>
  * <p>Company: www.NetJava.org</p>
+ *
  * @author javafound
  * @version 1.0
  */
@@ -29,7 +30,8 @@ public class Server extends Thread {
         isStop = true;
         if (null != myServer) {
             closeServerSocket();
-        } while (this.connectionQueue.size() > 0) {
+        }
+        while (this.connectionQueue.size() > 0) {
             Transfer tc = (Transfer) connectionQueue.remove(0);
             tc.closeSocket(tc.socket);
             tc = null;
@@ -41,8 +43,12 @@ public class Server extends Thread {
         SysLog.info(" start Transfer......:" + route.toString());
         ServerSocket myServer = null;
         try {
-            InetAddress myAD = Inet4Address.getByName(route.LocalIP);
-            myServer = new ServerSocket(route.LocalPort, 4, myAD);
+            if (route.getLocalIP() != null && route.getLocalIP().trim().length() > 0) {
+                InetAddress myAD = Inet4Address.getByName(route.getLocalIP());
+                myServer = new ServerSocket(route.getLocalPort(), 4, myAD);
+            } else {
+                myServer = new ServerSocket(route.getLocalPort(), 4);
+            }
         } catch (Exception ef) {
             SysLog.severe("Create Server " + route.toString() + " error:" + ef);
             closeServerSocket();
@@ -77,19 +83,22 @@ public class Server extends Thread {
 
     //检测进入的IP是否己许可
     private static boolean checkIP(Route route, String inIP) {
-        String[] inI = string2StringArray(inIP, ".");
-        String[] list = string2StringArray(route.AllowClient, ".");
-        if (inI.length != list.length) {
-            SysLog.severe(" Transfer Server Error Cfg AllowClient : " +
-                    route.toString());
-            return false;
+        if (route.getIsAll()) {
+            return true;
         }
-        for (int i = 0; i < inI.length; i++) {
-            if ((!inI[i].equals(list[i])) && !(list[i].equals("*"))) {
-                System.out.println(": " + inI[i] + " :" + list[i]);
-                return false;
-            }
-        }
+//        String[] inI = string2StringArray(inIP, ".");
+//        String[] list = string2StringArray(route.getAllowClient(), ".");
+//        if (inI.length != list.length) {
+//            SysLog.severe(" Transfer Server Error Cfg AllowClient : " +
+//                    route.toString());
+//            return false;
+//        }
+//        for (int i = 0; i < inI.length; i++) {
+//            if ((!inI[i].equals(list[i])) && !(list[i].equals("*"))) {
+//                System.out.println(": " + inI[i] + " :" + list[i]);
+//                return false;
+//            }
+//        }
         return true;
     }
 
@@ -120,6 +129,7 @@ public class Server extends Thread {
         } catch (Exception ef) {
         }
     }
+
     private void closeSocket(Socket s) {
         try {
             s.close();
@@ -138,5 +148,5 @@ public class Server extends Thread {
     // 路由对象
     private Route route = null;
     //连结的ID号，暂未用
-    private static int  myID = 0;
+    private static int myID = 0;
 }
