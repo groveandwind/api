@@ -49,8 +49,10 @@ public class Route {
     //监听的端口
     private int localPort = 0;
     //转发数据的目标机器IP
+    @Setter
     private String destHost;
     //转发的目标端口
+    @Setter
     private int destPort = 0;
     @Setter
     private Boolean isAll = false;
