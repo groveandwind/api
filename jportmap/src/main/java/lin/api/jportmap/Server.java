@@ -4,6 +4,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -61,7 +62,7 @@ public class Server extends Thread {
                 Socket sock = myServer.accept();
                 clientIP = sock.getInetAddress().getHostAddress();
                 System.out.println(clientIP);
-                if (checkIP(route, clientIP)) {
+                if (CheckIP.checkIP(route, clientIP)) {
                     SysLog.warning(" ransfer Server : " + route.toString() +
                             "  Incoming:" + sock.getInetAddress());
                     sock.setSoTimeout(0);
@@ -79,47 +80,6 @@ public class Server extends Thread {
                         " accept error" + ef);
             }
         }
-    }
-
-    //检测进入的IP是否己许可
-    private static boolean checkIP(Route route, String inIP) {
-        if (route.getIsAll()) {
-            return true;
-        }
-//        String[] inI = string2StringArray(inIP, ".");
-//        String[] list = string2StringArray(route.getAllowClient(), ".");
-//        if (inI.length != list.length) {
-//            SysLog.severe(" Transfer Server Error Cfg AllowClient : " +
-//                    route.toString());
-//            return false;
-//        }
-//        for (int i = 0; i < inI.length; i++) {
-//            if ((!inI[i].equals(list[i])) && !(list[i].equals("*"))) {
-//                System.out.println(": " + inI[i] + " :" + list[i]);
-//                return false;
-//            }
-//        }
-        return true;
-    }
-
-
-    /*
-     * 把字符串数组用separator衔接为一个字符串
-     * @param srcString 原字符串
-     * @param separator 分隔符
-     * @return 目的数组
-     */
-    private static final String[] string2StringArray(String srcString,
-                                                     String separator) {
-        int index = 0;
-        String[] temp;
-        StringTokenizer st = new StringTokenizer(srcString, separator);
-        temp = new String[st.countTokens()];
-        while (st.hasMoreTokens()) {
-            temp[index] = st.nextToken().trim();
-            index++;
-        }
-        return temp;
     }
 
     //关闭ServerSocket

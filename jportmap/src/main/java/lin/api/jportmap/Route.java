@@ -11,9 +11,13 @@ package lin.api.jportmap;
 
 import com.sun.deploy.util.StringUtils;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 转发任务的配置数据对象模板
@@ -23,6 +27,7 @@ import java.util.List;
  */
 @Getter
 public class Route {
+
     public Route(String localIp, int localPort, String destHost, int destPort) {
         this.isAll = true;
         this.allowClient.clear();
@@ -50,9 +55,13 @@ public class Route {
     private String destHost;
     //转发的目标端口
     private int destPort = 0;
+    @Setter
     private Boolean isAll = false;
     //这个转发上许可进入的IP列表
-    private List<String> allowClient = new ArrayList<String>();
+    @Setter
+    private List<String> allowRule = new ArrayList<String>();
+    //获得权限的IP
+    private Queue<String> allowClient = new ConcurrentLinkedQueue<>();
 
     //重写的toString方法，输出具体Route对象的信息以便debug
     @Override
@@ -66,4 +75,5 @@ public class Route {
         }
         return stb.toString();
     }
+
 }
