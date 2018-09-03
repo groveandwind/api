@@ -13,10 +13,7 @@ import com.sun.deploy.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -76,4 +73,23 @@ public class Route {
         return stb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Route route = (Route) o;
+        return localPort == route.localPort &&
+                destPort == route.destPort &&
+                Objects.equals(localIP, route.localIP) &&
+                Objects.equals(destHost, route.destHost) &&
+                Objects.equals(isAll, route.isAll) &&
+                Objects.equals(allowRule, route.allowRule);
+    }
+
+    public boolean isMe(Route r) {
+        if (localPort == r.getLocalPort()) {
+            return true;
+        }
+        return false;
+    }
 }

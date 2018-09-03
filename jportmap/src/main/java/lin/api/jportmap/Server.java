@@ -1,5 +1,8 @@
 package lin.api.jportmap;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -106,7 +109,10 @@ public class Server extends Thread {
     private Vector connectionQueue = null;
     private int connCounter = 0;
     // 路由对象
+    @Getter
     private Route route = null;
     //连结的ID号，暂未用
     private static int myID = 0;
+
+
 }
